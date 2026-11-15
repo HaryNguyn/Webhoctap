@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyHub - Trang cá nhân</title>
+  <link rel="icon" href="assets/hnue-logo.jpg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- ===== THANH MENU ===== -->
+  <header class="header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">
+        <img src="assets/hnue-logo.jpg" alt="Logo HNUE">
+        <span>Study<b>Hub</b></span>
+      </a>
+      <button class="menu-button" onclick="toggleMenu()" aria-label="Mở menu">☰</button>
+      <nav id="main-nav" class="nav">
+        <ul>
+          <li><a href="index.html">Thảo luận</a></li>
+          <li><a href="documents.html">Tài liệu</a></li>
+          <li class="member-only"><a href="friends.html">Bạn bè</a></li>
+          <li class="member-only"><a class="active" href="profile.html">Cá nhân</a></li>
+          <li id="mod-link"><a href="moderation.html">Kiểm duyệt</a></li>
+        </ul>
+        <div id="user-area" class="user-area"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== NỘI DUNG CHÍNH ===== -->
+  <main class="container">
+
+    <!-- 1. Thông tin cá nhân -->
+    <section class="card profile-card">
+      <div id="profile-avatar" class="avatar avatar-big"></div>
+      <div>
+        <h2 id="profile-name"></h2>
+        <!-- Danh sách mô tả (dl) gồm các cặp tên - giá trị -->
+        <dl class="info-list">
+          <dt>Tên đăng nhập</dt>
+          <dd id="info-username"></dd>
+          <dt>Email</dt>
+          <dd id="info-email"></dd>
+          <dt>Vai trò</dt>
+          <dd id="info-role"></dd>
+          <dt>Ngày tham gia</dt>
+          <dd id="info-joined"></dd>
+          <dt>Giới thiệu</dt>
+          <dd id="info-bio"></dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- 2. Thống kê -->
+    <h2 class="page-title">Thống kê hoạt động</h2>
+    <section class="stats-grid">
+      <div class="stat"><b id="stat-posts">0</b><span>Bài thảo luận</span></div>
+      <div class="stat"><b id="stat-docs">0</b><span>Tài liệu đã chia sẻ</span></div>
+      <div class="stat"><b id="stat-saved">0</b><span>Nội dung đã lưu</span></div>
+      <div class="stat"><b id="stat-friends">0</b><span>Bạn bè</span></div>
+      <div class="stat"><b id="stat-likes">0</b><span>Lượt thích nhận được</span></div>
+      <div class="stat"><b id="stat-comments">0</b><span>Bình luận đã viết</span></div>
+    </section>
+
+    <!-- 3. Bảng bài thảo luận của tôi -->
+    <section class="card">
+      <h3>📝 Bài thảo luận của tôi</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tiêu đề</th>
+              <th>Phạm vi</th>
+              <th>Trạng thái</th>
+              <th>Thích</th>
+              <th>Bình luận</th>
+              <th>Ngày đăng</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="my-posts-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4. Bảng tài liệu của tôi -->
+    <section class="card">
+      <h3>📄 Tài liệu tôi đã chia sẻ</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tên tài liệu</th>
+              <th>Môn học</th>
+              <th>Phạm vi</th>
+              <th>Trạng thái</th>
+              <th>Thích</th>
+              <th>Ngày chia sẻ</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="my-docs-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 5. Chỉnh sửa thông tin + đổi mật khẩu -->
+    <div class="grid-2">
+      <section class="card form-card">
+        <h3>✏️ Chỉnh sửa thông tin</h3>
+        <form id="info-form">
+          <div class="field">
+            <label for="edit-fullname">Họ và tên *</label>
+            <input id="edit-fullname" maxlength="50">
+          </div>
+          <div class="field">
+            <label for="edit-email">Email *</label>
+            <input id="edit-email" type="email">
+          </div>
+          <div class="field">
+            <label for="edit-bio">Giới thiệu bản thân</label>
+            <textarea id="edit-bio" rows="3" maxlength="200"></textarea>
+          </div>
+          <button class="btn" type="submit">Lưu thông tin</button>
+        </form>
+      </section>
+
+      <section class="card form-card">
+        <h3>🔒 Đổi mật khẩu</h3>
+        <form id="password-form">
+          <div class="field">
+            <label for="old-password">Mật khẩu hiện tại</label>
+            <input id="old-password" type="password">
+          </div>
+          <div class="field">
+            <label for="new-password">Mật khẩu mới (ít nhất 6 ký tự)</label>
+            <input id="new-password" type="password">
+          </div>
+          <div class="field">
+            <label for="confirm-password">Nhập lại mật khẩu mới</label>
+            <input id="confirm-password" type="password">
+          </div>
+          <button class="btn" type="submit">Đổi mật khẩu</button>
+        </form>
+      </section>
+    </div>
+
+    <!-- 6. Nội dung đã lưu -->
+    <h2 class="page-title">Nội dung đã lưu</h2>
+    <h3>Bài viết đã lưu</h3>
+    <div id="saved-posts"></div>
+    <h3>Tài liệu đã lưu</h3>
+    <div id="saved-docs"></div>
+  </main>
+
+  <!-- ===== CHÂN TRANG ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© 2026 StudyHub - Website thảo luận và chia sẻ tài nguyên học tập</p>
+      <p>Tài khoản thử: <b>an / 123456</b> (người dùng) · <b>mod / 123456</b> (kiểm duyệt)
+        · <button class="link-button" onclick="resetData()">Khôi phục dữ liệu mẫu</button></p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+
+</html>

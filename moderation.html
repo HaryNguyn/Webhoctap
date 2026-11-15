@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyHub - Kiểm duyệt</title>
+  <link rel="icon" href="assets/hnue-logo.jpg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- ===== THANH MENU ===== -->
+  <header class="header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">
+        <img src="assets/hnue-logo.jpg" alt="Logo HNUE">
+        <span>Study<b>Hub</b></span>
+      </a>
+      <button class="menu-button" onclick="toggleMenu()" aria-label="Mở menu">☰</button>
+      <nav id="main-nav" class="nav">
+        <ul>
+          <li><a href="index.html">Thảo luận</a></li>
+          <li><a href="documents.html">Tài liệu</a></li>
+          <li class="member-only"><a href="friends.html">Bạn bè</a></li>
+          <li class="member-only"><a href="profile.html">Cá nhân</a></li>
+          <li id="mod-link"><a class="active" href="moderation.html">Kiểm duyệt</a></li>
+        </ul>
+        <div id="user-area" class="user-area"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== NỘI DUNG CHÍNH ===== -->
+  <main class="container">
+    <h2 class="page-title">Khu vực kiểm duyệt</h2>
+
+    <!-- Các nút chuyển tab -->
+    <div class="tabs">
+      <button id="tab-queue" class="tab active" onclick="showTab('queue')">Hàng chờ duyệt <span id="queue-count" class="badge">0</span></button>
+      <button id="tab-reports" class="tab" onclick="showTab('reports')">Báo cáo <span id="report-count" class="badge">0</span></button>
+      <button id="tab-stats" class="tab" onclick="showTab('stats')">Thống kê</button>
+    </div>
+
+    <!-- TAB 1: HÀNG CHỜ DUYỆT -->
+    <section id="panel-queue" class="tab-panel">
+      <p class="muted">
+        Mức ưu tiên: <span class="badge badge-high">Cao</span> có người báo cáo ·
+        <span class="badge badge-medium">Trung bình</span> chờ từ 2 ngày trở lên ·
+        <span class="badge badge-low">Thấp</span> nội dung mới gửi.
+      </p>
+      <div id="queue-list"></div>
+
+      <h3>Đang chờ tác giả chỉnh sửa</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Loại</th>
+              <th>Tiêu đề</th>
+              <th>Tác giả</th>
+              <th>Ghi chú đã gửi</th>
+            </tr>
+          </thead>
+          <tbody id="needs-edit-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 2: BÁO CÁO -->
+    <section id="panel-reports" class="tab-panel" style="display: none;">
+      <div id="report-list"></div>
+
+      <h3>Lịch sử xử lý báo cáo</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Thời gian</th>
+              <th>Người báo cáo</th>
+              <th>Lý do</th>
+              <th>Kết quả xử lý</th>
+            </tr>
+          </thead>
+          <tbody id="report-history"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 3: THỐNG KÊ -->
+    <section id="panel-stats" class="tab-panel" style="display: none;">
+      <section class="stats-grid">
+        <div class="stat"><b id="stat-users">0</b><span>Thành viên</span></div>
+        <div class="stat"><b id="stat-posts">0</b><span>Bài thảo luận</span></div>
+        <div class="stat"><b id="stat-docs">0</b><span>Tài liệu</span></div>
+        <div class="stat"><b id="stat-comments">0</b><span>Bình luận</span></div>
+        <div class="stat"><b id="stat-pending">0</b><span>Đang chờ duyệt</span></div>
+        <div class="stat"><b id="stat-reports">0</b><span>Báo cáo chưa xử lý</span></div>
+      </section>
+
+      <div class="grid-2">
+        <section class="card">
+          <h3>📊 Chủ đề được quan tâm</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Chủ đề / Môn học</th>
+                  <th>Số nội dung</th>
+                  <th>Bình luận</th>
+                  <th>Lượt thích</th>
+                </tr>
+              </thead>
+              <tbody id="topic-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>⭐ Top 5 nội dung hữu ích</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nội dung</th>
+                  <th>Loại</th>
+                  <th>Điểm (thích - không thích)</th>
+                </tr>
+              </thead>
+              <tbody id="helpful-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>💬 Top 5 bài thảo luận sôi nổi</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Bài viết</th>
+                  <th>Bình luận</th>
+                </tr>
+              </thead>
+              <tbody id="discussed-table"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== CHÂN TRANG ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© 2026 StudyHub - Website thảo luận và chia sẻ tài nguyên học tập</p>
+      <p><button class="link-button" onclick="resetData()">Khôi phục dữ liệu mẫu</button></p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/moderation.js"></script>
+</body>
+
+</html>

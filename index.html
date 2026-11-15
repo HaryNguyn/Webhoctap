@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyHub - Thảo luận</title>
+  <link rel="icon" href="assets/hnue-logo.jpg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- ===== THANH MENU ===== -->
+  <header class="header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">
+        <img src="assets/hnue-logo.jpg" alt="Logo HNUE">
+        <span>Study<b>Hub</b></span>
+      </a>
+
+      <!-- Nút ☰ chỉ hiện trên điện thoại -->
+      <button class="menu-button" onclick="toggleMenu()" aria-label="Mở menu">☰</button>
+
+      <nav id="main-nav" class="nav">
+        <ul>
+          <li><a class="active" href="index.html">Thảo luận</a></li>
+          <li><a href="documents.html">Tài liệu</a></li>
+          <li class="member-only"><a href="friends.html">Bạn bè</a></li>
+          <li class="member-only"><a href="profile.html">Cá nhân</a></li>
+          <li id="mod-link"><a href="moderation.html">Kiểm duyệt</a></li>
+        </ul>
+        <!-- Khu vực tài khoản: JS sẽ điền nút Đăng nhập hoặc tên người dùng -->
+        <div id="user-area" class="user-area"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== BANNER GIỚI THIỆU (chỉ hiện với khách) ===== -->
+  <section id="hero" class="hero">
+    <div class="container hero-inner">
+      <div>
+        <h1>Học tốt hơn khi <span class="highlight">học cùng nhau</span></h1>
+        <p>StudyHub là nơi để đặt câu hỏi, trao đổi lời giải, chia sẻ tài liệu và kết nối với các bạn cùng học.</p>
+        <a class="btn" href="register.html">Tạo tài khoản miễn phí</a>
+        <a class="btn btn-outline" href="documents.html">Xem tài liệu</a>
+      </div>
+      <figure class="hero-figure">
+        <img src="assets/hnue-logo.jpg" alt="Logo Trường Đại học Sư phạm Hà Nội">
+        <figcaption>Cộng đồng học tập của sinh viên</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===== NỘI DUNG CHÍNH ===== -->
+  <main class="container layout">
+
+    <!-- Cột trái: đăng bài + danh sách bài -->
+    <section class="main-column">
+      <h2 class="page-title">Bài thảo luận</h2>
+
+      <!-- Thông báo cho khách -->
+      <p id="guest-box" class="notice">
+        Bạn đang xem với tư cách <b>khách</b>: chỉ thấy các bài công khai đã được duyệt.
+        <a href="login.html">Đăng nhập</a> để đăng bài, bình luận và kết bạn.
+      </p>
+
+      <!-- Form đăng bài / sửa bài (chỉ hiện khi đã đăng nhập) -->
+      <section id="composer" class="card form-card">
+        <h3 id="form-title">Tạo bài thảo luận mới</h3>
+        <p class="muted">Bài Công khai / Bạn bè cần được người kiểm duyệt duyệt trước khi hiển thị.</p>
+        <p id="edit-note" class="mod-note" style="display: none;"></p>
+
+        <form id="post-form">
+          <div class="field">
+            <label for="post-title">Tiêu đề *</label>
+            <input id="post-title" maxlength="120" placeholder="Bạn muốn hỏi hoặc chia sẻ điều gì?">
+          </div>
+
+          <div class="field">
+            <label for="post-content">Nội dung *</label>
+            <textarea id="post-content" rows="4" placeholder="Viết chi tiết câu hỏi hoặc điều bạn muốn chia sẻ..."></textarea>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="post-topic">Chủ đề *</label>
+              <input id="post-topic" list="topic-list" maxlength="40" placeholder="Ví dụ: Lập trình">
+              <datalist id="topic-list">
+                <option value="Lập trình">
+                <option value="Toán học">
+                <option value="Ngoại ngữ">
+                <option value="Kỹ năng học tập">
+                <option value="Dự án">
+              </datalist>
+            </div>
+            <div class="field">
+              <label for="post-media">Link ảnh / video (không bắt buộc)</label>
+              <input id="post-media" type="url" placeholder="https://...">
+            </div>
+          </div>
+
+          <!-- Chọn phạm vi hiển thị bằng nút radio -->
+          <fieldset class="field">
+            <legend>Ai có thể xem bài này?</legend>
+            <label class="radio"><input type="radio" name="post-scope" value="public" checked> Công khai</label>
+            <label class="radio"><input type="radio" name="post-scope" value="friends"> Bạn bè</label>
+            <label class="radio"><input type="radio" name="post-scope" value="onlyme"> Chỉ mình tôi</label>
+          </fieldset>
+
+          <div class="form-buttons">
+            <button id="cancel-edit" class="btn btn-outline" type="button" onclick="cancelEdit()" style="display: none;">Hủy sửa</button>
+            <button id="submit-post" class="btn" type="submit">Đăng bài</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Thanh tìm kiếm và bộ lọc -->
+      <form class="filter-bar" onsubmit="event.preventDefault()">
+        <input id="search-input" type="search" placeholder="🔍 Tìm theo tiêu đề, nội dung, chủ đề..." oninput="renderPage()">
+
+        <select id="topic-filter" onchange="renderPage()">
+          <option value="">Tất cả chủ đề</option>
+        </select>
+
+        <select id="type-filter" onchange="renderPage()">
+          <option value="all">Tất cả bài viết</option>
+          <option value="helpful">Hữu ích (nhiều lượt thích)</option>
+          <option value="interested">Được quan tâm (có bình luận)</option>
+          <option value="mine" class="need-login">Bài của tôi</option>
+          <option value="friends" class="need-login">Bài của bạn bè</option>
+          <option value="saved" class="need-login">Bài đã lưu</option>
+        </select>
+
+        <select id="sort-select" onchange="renderPage()">
+          <option value="newest">Mới nhất</option>
+          <option value="oldest">Cũ nhất</option>
+          <option value="likes">Nhiều lượt thích</option>
+          <option value="comments">Nhiều bình luận</option>
+        </select>
+      </form>
+
+      <p id="result-count" class="muted"></p>
+
+      <!-- Danh sách bài viết: JS sẽ điền vào đây -->
+      <div id="post-list"></div>
+    </section>
+
+    <!-- Cột phải (sidebar) -->
+    <aside class="sidebar">
+      <section class="card">
+        <h3>🔥 Chủ đề nổi bật</h3>
+        <ul id="hot-topics" class="simple-list"></ul>
+      </section>
+
+      <section class="card">
+        <h3>📌 Quy tắc cộng đồng</h3>
+        <ol class="rules">
+          <li>Tôn trọng mọi thành viên.</li>
+          <li>Đặt tiêu đề rõ ràng, đúng chủ đề.</li>
+          <li>Ghi nguồn khi chia sẻ tài liệu.</li>
+          <li>Không đăng nội dung quảng cáo, spam.</li>
+          <li>Báo cáo nội dung không phù hợp để kiểm duyệt viên xử lý.</li>
+        </ol>
+      </section>
+
+      <section class="card">
+        <h3>❓ Câu hỏi thường gặp</h3>
+        <details>
+          <summary>Vì sao bài của tôi chưa hiện?</summary>
+          <p>Bài Công khai và Bạn bè phải được người kiểm duyệt duyệt trước khi người khác nhìn thấy.</p>
+        </details>
+        <details>
+          <summary>"Chỉ mình tôi" là gì?</summary>
+          <p>Bài chỉ bạn xem được, giống như ghi chú cá nhân, không cần duyệt.</p>
+        </details>
+      </section>
+    </aside>
+  </main>
+
+  <!-- ===== CHÂN TRANG ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© 2026 StudyHub - Website thảo luận và chia sẻ tài nguyên học tập</p>
+    </div>
+  </footer>
+
+  <!-- Khung thông báo nhỏ -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Thứ tự file JS quan trọng: data -> common -> cards -> file của trang -->
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/discussion.js"></script>
+</body>
+
+</html>

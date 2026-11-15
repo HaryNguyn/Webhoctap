@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyHub - Tài liệu</title>
+  <link rel="icon" href="assets/hnue-logo.jpg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- ===== THANH MENU ===== -->
+  <header class="header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">
+        <img src="assets/hnue-logo.jpg" alt="Logo HNUE">
+        <span>Study<b>Hub</b></span>
+      </a>
+      <button class="menu-button" onclick="toggleMenu()" aria-label="Mở menu">☰</button>
+      <nav id="main-nav" class="nav">
+        <ul>
+          <li><a href="index.html">Thảo luận</a></li>
+          <li><a class="active" href="documents.html">Tài liệu</a></li>
+          <li class="member-only"><a href="friends.html">Bạn bè</a></li>
+          <li class="member-only"><a href="profile.html">Cá nhân</a></li>
+          <li id="mod-link"><a href="moderation.html">Kiểm duyệt</a></li>
+        </ul>
+        <div id="user-area" class="user-area"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== NỘI DUNG CHÍNH ===== -->
+  <main class="container layout">
+
+    <section class="main-column">
+      <h2 class="page-title">Thư viện tài liệu</h2>
+
+      <p id="guest-box" class="notice">
+        Bạn đang xem với tư cách <b>khách</b>: chỉ thấy tài liệu công khai đã được duyệt.
+        <a href="login.html">Đăng nhập</a> để chia sẻ và lưu tài liệu.
+      </p>
+
+      <!-- Form chia sẻ / sửa tài liệu -->
+      <section id="composer" class="card form-card">
+        <h3 id="form-title">Chia sẻ tài liệu mới</h3>
+        <p id="edit-note" class="mod-note" style="display: none;"></p>
+
+        <form id="doc-form">
+          <div class="field-row">
+            <div class="field">
+              <label for="doc-name">Tên tài liệu *</label>
+              <input id="doc-name" maxlength="100" placeholder="Ví dụ: Giáo trình HTML cơ bản">
+            </div>
+            <div class="field">
+              <label for="doc-subject">Môn học *</label>
+              <input id="doc-subject" list="subject-list" maxlength="40" placeholder="Ví dụ: Lập trình">
+              <datalist id="subject-list">
+                <option value="Lập trình">
+                <option value="Toán học">
+                <option value="Ngoại ngữ">
+                <option value="Sinh học">
+              </datalist>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="doc-link">Đường link tài liệu *</label>
+            <input id="doc-link" type="url" placeholder="https://drive.google.com/...">
+          </div>
+
+          <div class="field">
+            <label for="doc-description">Mô tả ngắn *</label>
+            <textarea id="doc-description" rows="3" placeholder="Tài liệu này nói về gì, hữu ích cho ai?"></textarea>
+          </div>
+
+          <fieldset class="field">
+            <legend>Phạm vi chia sẻ</legend>
+            <label class="radio"><input type="radio" name="doc-scope" value="public" checked> Công khai</label>
+            <label class="radio"><input type="radio" name="doc-scope" value="friends"> Bạn bè</label>
+            <label class="radio"><input type="radio" name="doc-scope" value="onlyme"> Chỉ mình tôi</label>
+          </fieldset>
+
+          <div class="form-buttons">
+            <button id="cancel-edit" class="btn btn-outline" type="button" onclick="cancelEdit()" style="display: none;">Hủy sửa</button>
+            <button id="submit-doc" class="btn" type="submit">Chia sẻ</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Tìm kiếm, lọc, sắp xếp -->
+      <form class="filter-bar" onsubmit="event.preventDefault()">
+        <input id="search-input" type="search" placeholder="🔍 Tìm theo tên, mô tả, môn học..." oninput="renderPage()">
+
+        <select id="subject-filter" onchange="renderPage()">
+          <option value="">Tất cả môn học</option>
+        </select>
+
+        <select id="type-filter" onchange="renderPage()">
+          <option value="all">Tất cả tài liệu</option>
+          <option value="helpful">Hữu ích (nhiều lượt thích)</option>
+          <option value="mine" class="need-login">Tài liệu của tôi</option>
+          <option value="friends" class="need-login">Của bạn bè</option>
+          <option value="saved" class="need-login">Đã lưu</option>
+        </select>
+
+        <select id="sort-select" onchange="renderPage()">
+          <option value="newest">Mới nhất</option>
+          <option value="oldest">Cũ nhất</option>
+          <option value="likes">Nhiều lượt thích</option>
+          <option value="name">Tên A → Z</option>
+        </select>
+      </form>
+
+      <p id="result-count" class="muted"></p>
+      <div id="doc-list"></div>
+    </section>
+
+    <aside class="sidebar">
+      <section class="card">
+        <h3>👀 Ai xem được tài liệu?</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Phạm vi</th>
+                <th>Người xem</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Công khai</td>
+                <td>Mọi người, kể cả khách</td>
+              </tr>
+              <tr>
+                <td>Bạn bè</td>
+                <td>Chỉ bạn bè của bạn</td>
+              </tr>
+              <tr>
+                <td>Chỉ mình tôi</td>
+                <td>Chỉ bạn</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted">Tài liệu Công khai và Bạn bè cần được kiểm duyệt trước khi hiển thị.</p>
+      </section>
+
+      <section class="card">
+        <h3>💡 Mẹo chia sẻ</h3>
+        <ul class="rules">
+          <li>Đặt tên tài liệu rõ ràng.</li>
+          <li>Kiểm tra link mở được trước khi chia sẻ.</li>
+          <li>Mô tả tài liệu phù hợp với ai.</li>
+        </ul>
+      </section>
+    </aside>
+  </main>
+
+  <!-- ===== CHÂN TRANG ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© 2026 StudyHub - Website thảo luận và chia sẻ tài nguyên học tập</p>
+      <p>Tài khoản thử: <b>an / 123456</b> (người dùng) · <b>mod / 123456</b> (kiểm duyệt)
+        · <button class="link-button" onclick="resetData()">Khôi phục dữ liệu mẫu</button></p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/documents.js"></script>
+</body>
+
+</html>

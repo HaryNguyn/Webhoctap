@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyHub - Bạn bè</title>
+  <link rel="icon" href="assets/hnue-logo.jpg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- ===== THANH MENU ===== -->
+  <header class="header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">
+        <img src="assets/hnue-logo.jpg" alt="Logo HNUE">
+        <span>Study<b>Hub</b></span>
+      </a>
+      <button class="menu-button" onclick="toggleMenu()" aria-label="Mở menu">☰</button>
+      <nav id="main-nav" class="nav">
+        <ul>
+          <li><a href="index.html">Thảo luận</a></li>
+          <li><a href="documents.html">Tài liệu</a></li>
+          <li class="member-only"><a class="active" href="friends.html">Bạn bè</a></li>
+          <li class="member-only"><a href="profile.html">Cá nhân</a></li>
+          <li id="mod-link"><a href="moderation.html">Kiểm duyệt</a></li>
+        </ul>
+        <div id="user-area" class="user-area"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== NỘI DUNG CHÍNH ===== -->
+  <main class="container">
+    <h2 class="page-title">Kết nối bạn bè</h2>
+    <p class="muted">Khi đã là bạn bè, hai bạn xem được các bài thảo luận và tài liệu có phạm vi "Bạn bè" của nhau.</p>
+
+    <div class="grid-2">
+      <!-- Lời mời kết bạn gửi đến mình -->
+      <section class="card">
+        <h3>📩 Lời mời kết bạn <span id="incoming-count" class="badge">0</span></h3>
+        <div id="incoming-list"></div>
+      </section>
+
+      <!-- Lời mời mình đã gửi đi -->
+      <section class="card">
+        <h3>📤 Lời mời đã gửi <span id="outgoing-count" class="badge">0</span></h3>
+        <div id="outgoing-list"></div>
+      </section>
+
+      <!-- Danh sách bạn bè -->
+      <section class="card">
+        <h3>🤝 Bạn bè của tôi <span id="friend-count" class="badge">0</span></h3>
+        <div id="friend-list"></div>
+      </section>
+
+      <!-- Tìm thêm bạn mới -->
+      <section class="card">
+        <h3>🔍 Tìm bạn mới</h3>
+        <form class="filter-bar" onsubmit="event.preventDefault()">
+          <input id="search-people" type="search" placeholder="Tìm theo tên hoặc tên đăng nhập..." oninput="renderPage()">
+        </form>
+        <div id="people-list"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ===== CHÂN TRANG ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© 2026 StudyHub - Website thảo luận và chia sẻ tài nguyên học tập</p>
+      <p>Tài khoản thử: <b>an / 123456</b> (người dùng) · <b>mod / 123456</b> (kiểm duyệt)
+        · <button class="link-button" onclick="resetData()">Khôi phục dữ liệu mẫu</button></p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/friends.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyHub - Đăng ký</title>
+  <link rel="icon" href="assets/hnue-logo.jpg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- ===== THANH MENU ===== -->
+  <header class="header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">
+        <img src="assets/hnue-logo.jpg" alt="Logo HNUE">
+        <span>Study<b>Hub</b></span>
+      </a>
+      <button class="menu-button" onclick="toggleMenu()" aria-label="Mở menu">☰</button>
+      <nav id="main-nav" class="nav">
+        <ul>
+          <li><a href="index.html">Thảo luận</a></li>
+          <li><a href="documents.html">Tài liệu</a></li>
+          <li class="member-only"><a href="friends.html">Bạn bè</a></li>
+          <li class="member-only"><a href="profile.html">Cá nhân</a></li>
+          <li id="mod-link"><a href="moderation.html">Kiểm duyệt</a></li>
+        </ul>
+        <div id="user-area" class="user-area"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== FORM ĐĂNG KÝ ===== -->
+  <main class="container">
+    <section class="card auth-box">
+      <h2>Tạo tài khoản</h2>
+      <p class="muted">Tham gia cộng đồng học tập StudyHub.</p>
+
+      <form id="register-form">
+        <div class="field">
+          <label for="reg-username">Tên đăng nhập *</label>
+          <input id="reg-username" maxlength="20" placeholder="Chỉ gồm chữ thường không dấu, số, dấu _">
+        </div>
+        <div class="field">
+          <label for="reg-fullname">Họ và tên *</label>
+          <input id="reg-fullname" maxlength="50" placeholder="Ví dụ: Nguyễn Văn A">
+        </div>
+        <div class="field">
+          <label for="reg-email">Email *</label>
+          <input id="reg-email" type="email" placeholder="ban@gmail.com">
+        </div>
+        <div class="field">
+          <label for="reg-password">Mật khẩu * (ít nhất 6 ký tự)</label>
+          <input id="reg-password" type="password" autocomplete="new-password">
+        </div>
+        <div class="field">
+          <label for="reg-confirm">Nhập lại mật khẩu *</label>
+          <input id="reg-confirm" type="password" autocomplete="new-password">
+        </div>
+        <label class="radio">
+          <input id="agree" type="checkbox"> Tôi đồng ý với quy tắc cộng đồng của StudyHub
+        </label>
+
+        <p id="error-message" class="text-danger"></p>
+
+        <button class="btn btn-full" type="submit">Đăng ký</button>
+      </form>
+
+      <p class="muted center">Đã có tài khoản? <a href="login.html">Đăng nhập</a></p>
+    </section>
+  </main>
+
+  <!-- ===== CHÂN TRANG ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© 2026 StudyHub - Website thảo luận và chia sẻ tài nguyên học tập</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+
+</html>
